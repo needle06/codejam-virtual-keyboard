@@ -1,4 +1,5 @@
 import Key from "./Key";
+import { get } from "http";
 
 export default class Keyboard {
   constructor (parent) {
@@ -27,12 +28,13 @@ export default class Keyboard {
     ];
     
     this.enUp = [
-      ['`', '1', '2','3','4','5','6','7','8','9','0','-','=', 'Backspace'],
+      ['`', '!', '@','#','$','%','^','&','*','(',')','_','+', 'Backspace'],
       ['Tab','Q', 'W', 'E', 'R', 'T', 'Y','U', 'I', 'O', 'P', '[',']','\\', 'DEL'],
-      ['CapsLock','A','','S','D','F','G','H','J','K','L',';','\'','Enter'],
+      ['CapsLock','A','S','D','F','G','H','J','K','L',';','\'','Enter'],
       ['Shift','Z','X','C','V','B','N','M',',','.','/','▲','Shift',],
       ['Ctrl','Win','Alt','','Alt','◄','▼','►','Ctrl']
     ];
+    
     this.keyCodes = [
       [192,49,50,51,52,53,54,55,56,57,48,189,187,8],
       [9,81,87,69,82,84,89,85,73,79,80,219,221,220,46],
@@ -40,20 +42,25 @@ export default class Keyboard {
       [16,90,88,67,86,66,78,77,188,190,191,38,16],
       [17,91,18,32,18,37,40,39,17]
     ]
+    
     this.parent = parent;
+    
     this.state = {
       language: "ru",
       capsLock: false,
       shift: false,
       alt: false,
     }
-   
+
 
     this.keys = [];
     this.container = document.createElement('div');
+    this.container.classList.add('keyboard-container');
     this.parent.append(this.container);
 
-    this.fillRows()
+    this.fillRows();
+    this.setControlsClasses();
+    this.loadState();
 
     document.addEventListener('keydown', (e) => {
       console.log(e.code, " ", e.keyCode)
@@ -143,7 +150,62 @@ export default class Keyboard {
     } else {
       this.state.language = 'ru'
     }
+    this.saveState();
+    this.render();
+  }
+  setControlsClasses() {
+    let space = document.getElementById('32');
+    space.classList.add('space');
 
+    let alt = document.getElementById('18');
+    alt.classList.add('alt');
+
+    let ctrl = document.getElementById('17');
+    ctrl.classList.add('ctrl');
+
+    let shift = document.getElementById('16');
+    shift.classList.add('shift');
+
+    let backspace = document.getElementById('8');
+    backspace.classList.add('backspace');
+
+    let caps = document.getElementById('20');
+    caps.classList.add('caps');
+
+    let enter = document.getElementById('13');
+    enter.classList.add('enter');
+
+    let tab = document.getElementById('9');
+    tab.classList.add('tab');
+
+    let win = document.getElementById('91');
+    win.classList.add('win');
+
+    let arrowUp = document.getElementById('38');
+    arrowUp.classList.add('arrow-up');
+
+    let arrowDown = document.getElementById('40');
+    arrowDown.classList.add('arrow-down');
+
+    let arrowLeft = document.getElementById('37');
+    arrowLeft.classList.add('arrow-left');
+
+    let arrowRight = document.getElementById('39');
+    arrowRight.classList.add('arrow-right');
+
+    let del = document.getElementById('46');
+    del.classList.add('del');
+  }
+
+  saveState(){
+    localStorage.setItem('lang', this.state.language);
+  }
+
+  loadState() {
+    let lang = localStorage.getItem('lang');
+    if(lang !== null) {
+      this.state.language = lang;
+    }
     this.render();
   }
 
