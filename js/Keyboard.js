@@ -11,7 +11,7 @@ export default class Keyboard {
     ];
 
     this.ruUp = [
-      ['Ё', '1', '2','3','4','5','6','7','8','9','0','-','=', 'Backspace'],
+      ['Ё', '!', '"','№',';','%',':','?','*','(',')','_','+', 'Backspace'],
       ['Tab','Й', 'Ц', 'У', 'К', 'Е', 'Н','Г', 'Ш', 'Щ', 'З', 'Х','Ъ','\\', 'DEL'],
       ['CapsLock','Ф','Ы','В','А','П','Р','О','Л','Д','Ж','Э','Enter'],
       ['Shift','Я','Ч','С','М','И','Т','Ь','Б','Ю','.','▲','Shift',],
@@ -39,6 +39,7 @@ export default class Keyboard {
     this.parent.append(this.container);
 
     this.fillRows()
+
     document.addEventListener('keydown', (e) => {
       console.log(e.code, " ", e.keyCode)
       let keyCode = e.keyCode;
@@ -46,13 +47,10 @@ export default class Keyboard {
       if (targetDiv === null) {
         return;
       }
-      if (keyCode == 20) {
-        this.state.capsLock = !this.state.capsLock;
-        console.log(this.state)
-        this.render()
-      }
-      targetDiv.classList.add("keydown")
-      return;
+      targetDiv.classList.add("keydown");
+      this.capsToggle(keyCode);
+      this.setShift(keyCode);
+      this.setAlt(keyCode);
     })
     document.addEventListener('keyup', (e) => {
       let keyCode = e.keyCode;
@@ -60,7 +58,9 @@ export default class Keyboard {
       if (targetDiv === null) {
         return;
       }
-      targetDiv.classList.remove("keydown")
+      targetDiv.classList.remove("keydown");
+      this.clearShift(keyCode);
+      this.clearAlt(keyCode);
     })
   }
 
@@ -75,9 +75,44 @@ export default class Keyboard {
     }
   }
 
+  capsToggle(keyCode) {
+    if (keyCode == 20) {
+      this.state.capsLock = !this.state.capsLock;
+      this.render()
+    }
+  }
+
+  setShift(keyCode) {
+    if (keyCode == 16) {
+      this.state.shift = true;
+      this.render()
+    }
+  }
+
+  clearShift(keyCode){
+    if (keyCode == 16) {
+      this.state.shift = false;
+      this.render()
+    }
+  }
+
+  setAlt(keyCode) {
+    if (keyCode == 18) {
+      this.state.alt = true;
+      this.render()
+    }
+  }
+
+  clearAlt(keyCode){
+    if (keyCode == 18) {
+      this.state.alt = false;
+      this.render()
+    }
+  }
+
   render() {
     this.keys.forEach(key => {
-      key.render(this.state.language, this.state.capsLock);
+      key.render(this.state.language, this.state.capsLock, this.state.shift);
     });
   }
 }

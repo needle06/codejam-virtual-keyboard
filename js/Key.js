@@ -21,18 +21,25 @@ export default class Key {
     this.button.id = this.keyCode;
   }
 
-  render(language, capsState) {
-    if (language === 'ru' && capsState === false) {
+  render(language, capsState, shiftState) {
+    if (language === 'ru' && capsState === shiftState) {
       this.child.innerText = this.valueRuLow;
     }
-    if (language === 'ru' && capsState === true) {
+    if (language === 'ru' && capsState !== shiftState) {
       this.child.innerText = this.valueRuUp;
     }
-    if (language === 'en' && capsState === false) {
+    if (language === 'en' && capsState === shiftState) {
       this.child.innerText = this.valueEnLow;
     }
-    if (language === 'en' && capsState === true) {
+    if (language === 'en' && capsState !== shiftState) {
       this.child.innerText = this.valueEnUp;
+    }
+
+    if (capsState === true && this.keyCode === 20) {
+      this.button.classList.add('active');
+    }
+    if (capsState === false && this.keyCode === 20) {
+      this.button.classList.remove('active');
     }
   }
 }
