@@ -10,6 +10,14 @@ export default class Keyboard {
       ['Ctrl','Win','Alt','','Alt','◄','▼','►','Ctrl']
     ];
 
+    this.enLow = [
+      ['`', '1', '2','3','4','5','6','7','8','9','0','-','=', 'Backspace'],
+      ['Tab','q', 'w', 'e', 'r', 't', 'y','u', 'i', 'o', 'p', '[',']','\\', 'DEL'],
+      ['CapsLock','a','s','d','f','g','h','j','k','l',';','\'','Enter'],
+      ['Shift','z','x','c','v','b','n','m',',','.','/','▲','Shift',],
+      ['Ctrl','Win','Alt','','Alt','◄','▼','►','Ctrl']
+    ];
+
     this.ruUp = [
       ['Ё', '!', '"','№',';','%',':','?','*','(',')','_','+', 'Backspace'],
       ['Tab','Й', 'Ц', 'У', 'К', 'Е', 'Н','Г', 'Ш', 'Щ', 'З', 'Х','Ъ','\\', 'DEL'],
@@ -18,7 +26,14 @@ export default class Keyboard {
       ['Ctrl','Win','Alt','','Alt','◄','▼','►','Ctrl']
     ];
     
-    this.keyCode = [
+    this.enUp = [
+      ['`', '1', '2','3','4','5','6','7','8','9','0','-','=', 'Backspace'],
+      ['Tab','Q', 'W', 'E', 'R', 'T', 'Y','U', 'I', 'O', 'P', '[',']','\\', 'DEL'],
+      ['CapsLock','A','','S','D','F','G','H','J','K','L',';','\'','Enter'],
+      ['Shift','Z','X','C','V','B','N','M',',','.','/','▲','Shift',],
+      ['Ctrl','Win','Alt','','Alt','◄','▼','►','Ctrl']
+    ];
+    this.keyCodes = [
       [192,49,50,51,52,53,54,55,56,57,48,189,187,8],
       [9,81,87,69,82,84,89,85,73,79,80,219,221,220,46],
       [20,65,83,68,70,71,72,74,75,76,186,222,13],
@@ -51,6 +66,7 @@ export default class Keyboard {
       this.capsToggle(keyCode);
       this.setShift(keyCode);
       this.setAlt(keyCode);
+      this.toggleLanguage(keyCode);
     })
     document.addEventListener('keyup', (e) => {
       let keyCode = e.keyCode;
@@ -70,7 +86,7 @@ export default class Keyboard {
       this.row.classList.add('row');
       this.container.append(this.row);
       for (let j = 0; j < this.ruLow[i].length; j++) {
-        this.keys.push(new Key(this.ruLow[i][j], this.ruUp[i][j], 'a', 'A', this.keyCode[i][j], this.row));
+        this.keys.push(new Key(this.ruLow[i][j], this.ruUp[i][j], this.enLow[i][j], this.enUp[i][j], this.keyCodes[i][j], this.row));
       }
     }
   }
@@ -103,11 +119,32 @@ export default class Keyboard {
     }
   }
 
-  clearAlt(keyCode){
+  clearAlt(keyCode) {
     if (keyCode == 18) {
       this.state.alt = false;
       this.render()
     }
+  }
+
+  toggleLanguage(keyCode) {
+    if (keyCode != 18 && keyCode != 16) {
+      return;
+    }
+
+    if (!this.state.shift) {
+      return;
+    }
+    if (!this.state.alt) {
+      return;
+    }
+
+    if (this.state.language === 'ru') {
+      this.state.language = 'en';
+    } else {
+      this.state.language = 'ru'
+    }
+
+    this.render();
   }
 
   render() {
