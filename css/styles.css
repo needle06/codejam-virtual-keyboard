@@ -25,7 +25,8 @@ textarea {
 
 }
 
-.keydown {
+.keydown, .active {
   border-radius: 15px; 
   background:  #4b493b;
 }
+
