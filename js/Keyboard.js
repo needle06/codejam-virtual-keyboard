@@ -26,6 +26,12 @@ export default class Keyboard {
       [17,91,18,32,18,37,40,39,17]
     ]
     this.parent = parent;
+    this.state = {
+      language: "ru",
+      capsLock: false,
+      shift: false,
+      alt: false,
+    }
    
 
     this.keys = [];
@@ -39,6 +45,11 @@ export default class Keyboard {
       let targetDiv = document.getElementById(keyCode)
       if (targetDiv === null) {
         return;
+      }
+      if (keyCode == 20) {
+        this.state.capsLock = !this.state.capsLock;
+        console.log(this.state)
+        this.render()
       }
       targetDiv.classList.add("keydown")
       return;
@@ -54,7 +65,6 @@ export default class Keyboard {
   }
 
   fillRows() {
-
     for (let i = 0; i < 5; i++) {
       this.row = document.createElement('div');
       this.row.classList.add('row');
@@ -62,8 +72,12 @@ export default class Keyboard {
       for (let j = 0; j < this.ruLow[i].length; j++) {
         this.keys.push(new Key(this.ruLow[i][j], this.ruUp[i][j], 'a', 'A', this.keyCode[i][j], this.row));
       }
-      
     }
-    
+  }
+
+  render() {
+    this.keys.forEach(key => {
+      key.render(this.state.language, this.state.capsLock);
+    });
   }
 }
