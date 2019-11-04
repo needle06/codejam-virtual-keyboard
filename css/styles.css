@@ -38,7 +38,7 @@ textarea {
   background:  #c7902a;
 }
 
-.space  {
+.space, .space > span  {
   width: 260px;
   background: #1d2631;
 }
@@ -53,8 +53,19 @@ textarea {
   width: 80px;
   background: #1d2631;
 }
+
+.caps > span, .shift > span, .backspace > span, .enter > span, .tab > span {
+  display: inline-block;
+  width: 80px;
+}
+
 .active {
   border-radius: 15px; 
   background:  #c7902a;
 }
 
+span {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
