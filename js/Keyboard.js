@@ -7,7 +7,7 @@ export default class Keyboard {
       ['Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'DEL'],
       ['CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter'],
       ['Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '▲', 'Shift'],
-      ['Ctrl', 'Win', 'Alt', '', 'Alt', '◄', '▼', '►', 'Ctrl'],
+      ['Ctrl', 'Win', 'Alt', ' ', 'Alt', '◄', '▼', '►', 'Ctrl'],
     ];
 
     this.enLow = [
@@ -15,7 +15,7 @@ export default class Keyboard {
       ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'DEL'],
       ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter'],
       ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '▲', 'Shift'],
-      ['Ctrl', 'Win', 'Alt', '', 'Alt', '◄', '▼', '►', 'Ctrl'],
+      ['Ctrl', 'Win', 'Alt', ' ', 'Alt', '◄', '▼', '►', 'Ctrl'],
     ];
 
     this.ruUp = [
@@ -23,7 +23,7 @@ export default class Keyboard {
       ['Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '\\', 'DEL'],
       ['CapsLock', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'Enter'],
       ['Shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', '.', '▲', 'Shift'],
-      ['Ctrl', 'Win', 'Alt', '', 'Alt', '◄', '▼', '►', 'Ctrl'],
+      ['Ctrl', 'Win', 'Alt', ' ', 'Alt', '◄', '▼', '►', 'Ctrl'],
     ];
 
     this.enUp = [
@@ -31,15 +31,15 @@ export default class Keyboard {
       ['Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\', 'DEL'],
       ['CapsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', 'Enter'],
       ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', '▲', 'Shift'],
-      ['Ctrl', 'Win', 'Alt', '', 'Alt', '◄', '▼', '►', 'Ctrl'],
+      ['Ctrl', 'Win', 'Alt', ' ', 'Alt', '◄', '▼', '►', 'Ctrl'],
     ];
 
     this.keyCodes = [
       [192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187, 8],
       [9, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220, 46],
       [20, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 13],
-      [16, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 38, 16],
-      [17, 91, 18, 32, 18, 37, 40, 39, 17],
+      ['16l', 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 38, '16r'],
+      ['17l', 91, '18l', 32, '18r', 37, 40, 39, '17r'],
     ];
 
     this.parent = parent;
@@ -58,14 +58,20 @@ export default class Keyboard {
     this.parent.append(this.container);
 
     this.fillRows();
-    this.setControlsClasses();
+    Keyboard.setControlsClasses();
     this.loadState();
 
     document.addEventListener('keydown', (e) => {
       // eslint-disable-next-line no-console
       console.log(e.code, ' ', e.keyCode);
       const { keyCode } = e;
-      const targetDiv = document.getElementById(keyCode);
+
+      let searchCode = keyCode;
+      if (e.keyCode >= 16 && e.keyCode <= 18) {
+        searchCode += (e.code.includes('Right') ? 'r' : 'l');
+      }
+      const targetDiv = document.getElementById(searchCode);
+
       if (targetDiv === null) {
         return;
       }
@@ -77,7 +83,13 @@ export default class Keyboard {
     });
     document.addEventListener('keyup', (e) => {
       const { keyCode } = e;
-      const targetDiv = document.getElementById(keyCode);
+
+      let searchCode = keyCode;
+      if (e.keyCode >= 16 && e.keyCode <= 18) {
+        searchCode += (e.code.includes('Right') ? 'r' : 'l');
+      }
+      const targetDiv = document.getElementById(searchCode);
+
       if (targetDiv === null) {
         return;
       }
@@ -161,48 +173,57 @@ export default class Keyboard {
     this.render();
   }
 
-  setControlsClasses() {
+  static setControlsClasses() {
     const space = document.getElementById('32');
     space.classList.add('space');
 
-    const alt = document.getElementById('18');
-    alt.classList.add('alt');
+    const altR = document.getElementById('18r');
+    altR.classList.add('alt', 'control');
 
-    const ctrl = document.getElementById('17');
-    ctrl.classList.add('ctrl');
+    const ctrlR = document.getElementById('17r');
+    ctrlR.classList.add('ctrl', 'control');
 
-    const shift = document.getElementById('16');
-    shift.classList.add('shift');
+    const shiftR = document.getElementById('16r');
+    shiftR.classList.add('shift', 'control');
+
+    const altL = document.getElementById('18l');
+    altL.classList.add('alt', 'control');
+
+    const ctrlL = document.getElementById('17l');
+    ctrlL.classList.add('ctrl', 'control');
+
+    const shiftL = document.getElementById('16l');
+    shiftL.classList.add('shift', 'control');
 
     const backspace = document.getElementById('8');
-    backspace.classList.add('backspace');
+    backspace.classList.add('backspace', 'control');
 
     const caps = document.getElementById('20');
-    caps.classList.add('caps');
+    caps.classList.add('caps', 'control');
 
     const enter = document.getElementById('13');
-    enter.classList.add('enter');
+    enter.classList.add('enter', 'control');
 
     const tab = document.getElementById('9');
-    tab.classList.add('tab');
+    tab.classList.add('tab', 'control');
 
     const win = document.getElementById('91');
-    win.classList.add('win');
+    win.classList.add('win', 'control');
 
     const arrowUp = document.getElementById('38');
-    arrowUp.classList.add('arrow-up');
+    arrowUp.classList.add('arrow-up', 'control');
 
     const arrowDown = document.getElementById('40');
-    arrowDown.classList.add('arrow-down');
+    arrowDown.classList.add('arrow-down', 'control');
 
     const arrowLeft = document.getElementById('37');
-    arrowLeft.classList.add('arrow-left');
+    arrowLeft.classList.add('arrow-left', 'control');
 
     const arrowRight = document.getElementById('39');
-    arrowRight.classList.add('arrow-right');
+    arrowRight.classList.add('arrow-right', 'control');
 
     const del = document.getElementById('46');
-    del.classList.add('del');
+    del.classList.add('del', 'control');
   }
 
   saveState() {
