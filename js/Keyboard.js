@@ -252,6 +252,9 @@ export default class Keyboard {
         if (event.target.parentElement.id === '8') {
           this.textTarget.value = this.textTarget.value.slice(0, -1);
         }
+        if (event.target.parentElement.id === '13') {
+          this.textTarget.value += '\n';
+        }
       });
     });
   }
