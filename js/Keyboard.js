@@ -1,7 +1,7 @@
 import Key from './Key';
 
 export default class Keyboard {
-  constructor(parent) {
+  constructor(parent, textTarget) {
     this.ruLow = [
       ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
       ['Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'DEL'],
@@ -43,6 +43,7 @@ export default class Keyboard {
     ];
 
     this.parent = parent;
+    this.textTarget = textTarget;
 
     this.state = {
       language: 'ru',
@@ -60,10 +61,8 @@ export default class Keyboard {
     this.fillRows();
     Keyboard.setControlsClasses();
     this.loadState();
-
+    this.makeClickable();
     document.addEventListener('keydown', (e) => {
-      // eslint-disable-next-line no-console
-      console.log(e.code, ' ', e.keyCode);
       const { keyCode } = e;
 
       let searchCode = keyCode;
@@ -81,6 +80,7 @@ export default class Keyboard {
       this.setAlt(keyCode);
       this.toggleLanguage(keyCode);
     });
+
     document.addEventListener('keyup', (e) => {
       const { keyCode } = e;
 
@@ -236,6 +236,24 @@ export default class Keyboard {
       this.state.language = lang;
     }
     this.render();
+  }
+
+  makeClickable() {
+    this.container.addEventListener('click', (event) => {
+      const { target } = event;
+      if (target.tagName !== 'SPAN') return;
+      if (target.parentElement.classList.contains('control')) return;
+      this.textTarget.value += target.textContent;
+    });
+
+    const controls = document.querySelectorAll('.control');
+    controls.forEach((el) => {
+      el.addEventListener('click', (event) => {
+        if (event.target.parentElement.id === '8') {
+          this.textTarget.value = this.textTarget.value.slice(0, -1);
+        }
+      });
+    });
   }
 
   render() {
