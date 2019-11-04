@@ -62,6 +62,10 @@ export default class Keyboard {
     Keyboard.setControlsClasses();
     this.loadState();
     this.makeClickable();
+    this.textTarget.addEventListener('keypress', (e) => {
+      e.preventDefault();
+    });
+
     document.addEventListener('keydown', (e) => {
       const { keyCode } = e;
 
@@ -74,6 +78,23 @@ export default class Keyboard {
       if (targetDiv === null) {
         return;
       }
+
+      if (e.keyCode === 9) {
+        e.preventDefault();
+      }
+
+      if (targetDiv.id === '8') {
+        this.textTarget.value = this.textTarget.value.slice(0, -1);
+      }
+
+      if (targetDiv.id === '13') {
+        this.textTarget.value += '\n';
+      }
+
+      if (!targetDiv.classList.contains('control')) {
+        this.textTarget.value += targetDiv.children[0].textContent;
+      }
+
       targetDiv.classList.add('keydown');
       this.capsToggle(keyCode);
       this.setShift(keyCode);
