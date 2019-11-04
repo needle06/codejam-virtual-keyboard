@@ -1,11 +1,12 @@
-import Keyboard from "./Keyboard";
+import Keyboard from './Keyboard';
 
-let wrapper = document.createElement('div');
+const wrapper = document.createElement('div');
 wrapper.classList.add('wrapper');
 
-let textArea = document.createElement('textarea');
+const textArea = document.createElement('textarea');
 document.body.append(wrapper);
 wrapper.prepend(textArea);
-//wrapper.append(keyboard);
 
-let keyboard = new Keyboard(wrapper);
+
+const keyboard = new Keyboard(wrapper, textArea);
+keyboard.render();
