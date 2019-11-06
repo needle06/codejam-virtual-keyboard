@@ -1,0 +1,75 @@
+.wrapper {
+  width: 740px;
+  margin: 0 auto;
+}
+textarea {
+  width: 70%;
+  height: 50px;
+  display: block;
+  margin: 50px auto;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.keyboard-container {
+  margin: 0 auto;
+}
+.row {
+  display: flex;
+  height: 40px;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.key {
+    width: 40px;
+    height: 40px;
+    float: left;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 6px;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 5px;
+    background:#56718f;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: border-radius 0.3s, background-color 0.3s;
+
+}
+
+.keydown {
+  border-radius: 15px; 
+  background:  #c7902a;
+}
+
+.space, .space > span  {
+  width: 365px;
+  background: #1d2631;
+}
+
+.del, .arrow-up, .arrow-down,
+.arrow-left, .arrow-right, .win, .ctrl, .alt {
+  background: #1d2631;
+}
+
+
+.caps, .shift, .backspace, .enter, .tab {
+  width: 80px;
+  background: #1d2631;
+}
+
+.caps > span, .shift > span, .backspace > span, .enter > span, .tab > span {
+  display: inline-block;
+  width: 80px;
+}
+
+.active {
+  border-radius: 15px; 
+  background:  #c7902a;
+}
+
+span {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
